@@ -1,4 +1,4 @@
-FROM tomcat:jdk8
+FROM tomcat:10-jdk8
 MAINTAINER Hiromu Hota <hiromu.hota@hal.hitachi.com>
 ENV JAVA_OPTS="-Xms1024m -Xmx2048m"
 RUN rm -rf ${CATALINA_HOME}/webapps/* \
