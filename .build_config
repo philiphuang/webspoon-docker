@@ -1,0 +1,4 @@
+LABEL=registry.cn-shenzhen.aliyuncs.com/philiphuang/webspoon-docker:tomcat9-jdk8
+testImage(){
+    echo "没有测试"
+}

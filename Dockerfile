@@ -1,21 +1,32 @@
-FROM tomcat:9-jre8
+FROM tomcat:9-jdk8
 MAINTAINER Hiromu Hota <hiromu.hota@hal.hitachi.com>
 ENV JAVA_OPTS="-Xms1024m -Xmx2048m"
 RUN rm -rf ${CATALINA_HOME}/webapps/* \
     && mkdir ${CATALINA_HOME}/webapps/ROOT \
     && echo "<% response.sendRedirect(\"spoon\"); %>" > ${CATALINA_HOME}/webapps/ROOT/index.jsp
 
+# check PDI-client version at https://sourceforge.net/projects/pentaho/files/
+# check webspoon version at https://github.com/HiromuHota/pentaho-kettle/releases
+# check mysql connector-j version at https://dev.mysql.com/doc/index-connectors.html
+ARG pdi-client-version=9.3.0.0-428
 ARG base=9.0
-ARG patch=21
+ARG patch=22
 ARG version=0.$base.$patch
 ARG dist=9.0.0.0-423
 
 RUN groupadd -r tomcat \
     && useradd -r --create-home -g tomcat tomcat \
     && chown -R tomcat:tomcat ${CATALINA_HOME}
+# tomcat9-jdk8底包去除了unzip，需要补上
+RUN apt-get update  && \
+    apt-get install --assume-yes unzip && \
+    apt-get clean autoclean  && \
+    apt-get autoremove -y  && \
+    rm -rf /var/lib/apt/lists/*
+
 USER tomcat
 
-RUN wget -q https://sourceforge.net/projects/pentaho/files/Pentaho%20$base/client-tools/pdi-ce-$dist.zip && \
+RUN wget -q https://sourceforge.net/projects/pentaho/files/Pentaho%20$pdi-client-version/client-tools/pdi-ce-$dist.zip && \
   unzip -q pdi-ce-$dist.zip && \
   mv data-integration/system ${CATALINA_HOME}/system && \
   mv data-integration/plugins ${CATALINA_HOME}/plugins && \
