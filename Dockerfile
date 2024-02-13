@@ -8,8 +8,8 @@ RUN rm -rf ${CATALINA_HOME}/webapps/* \
 # check PDI-client version at https://sourceforge.net/projects/pentaho/files/
 # check webspoon version at https://github.com/HiromuHota/pentaho-kettle/releases
 # check mysql connector-j version at https://dev.mysql.com/doc/index-connectors.html
-ARG pdi-ver-main=9.3
-ARG pdi-ver-full=9.3.0.0-428
+ARG pdi_ver_main=9.3
+ARG pdi_ver_full=9.3.0.0-428
 ARG base=9.0
 ARG patch=22
 ARG version=0.$base.$patch
@@ -26,7 +26,7 @@ RUN apt-get update  && \
     rm -rf /var/lib/apt/lists/*
 
 USER tomcat
-RUN wget -q https://sourceforge.net/projects/pentaho/files/Pentaho-$pdi-ver-main/client-tools/pdi-ce-$pdi-ver-full.zip && \
+RUN wget -q https://sourceforge.net/projects/pentaho/files/Pentaho-${pdi_ver_main}/client-tools/pdi-ce-${pdi_ver_full}.zip  && \
   unzip -q pdi-ce-${pdi-ver-full}.zip && \
   mv data-integration/system ${CATALINA_HOME}/system && \
   mv data-integration/plugins ${CATALINA_HOME}/plugins && \
